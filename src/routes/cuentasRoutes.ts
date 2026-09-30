@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
+import { requiereAutenticacion } from '../middlewares/autenticacion';
 import {
   listarCuentas,
   obtenerCuenta,
@@ -11,8 +12,8 @@ const router = Router();
 
 router.get('/', asyncHandler(listarCuentas));
 router.get('/:id', asyncHandler(obtenerCuenta));
-router.post('/', asyncHandler(crearCuenta));
-router.put('/:id', asyncHandler(actualizarEstadoCuenta));
-router.patch('/:id', asyncHandler(actualizarEstadoCuenta));
+router.post('/', requiereAutenticacion, asyncHandler(crearCuenta));
+router.put('/:id', requiereAutenticacion, asyncHandler(actualizarEstadoCuenta));
+router.patch('/:id', requiereAutenticacion, asyncHandler(actualizarEstadoCuenta));
 
 export default router;
