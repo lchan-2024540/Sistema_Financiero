@@ -4,6 +4,8 @@ import authRoutes from './routes/authRoutes';
 import clientesRoutes from './routes/clientesRoutes';
 import cuentasRoutes from './routes/cuentasRoutes';
 import { depositosRouter, retirosRouter } from './routes/operacionesRoutes';
+import transferenciasRoutes from './routes/transferenciasRoutes';
+import movimientosRoutes from './routes/movimientosRoutes';
 import { manejadorErrores, rutaNoEncontrada } from './middlewares/manejadorErrores';
 
 export const app: Application = express();
@@ -17,12 +19,14 @@ app.get('/', (_req, res) => {
 });
 
 // Módulos implementados: clientes y cuentas (Día 5); auth, depósitos y
-// retiros (Día 6). Transferencias y movimientos se agregan en el Día 7.
+// retiros (Día 6); transferencias y movimientos (Día 7).
 app.use('/auth', authRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/cuentas', cuentasRoutes);
 app.use('/depositos', depositosRouter);
 app.use('/retiros', retirosRouter);
+app.use('/transferencias', transferenciasRoutes);
+app.use('/movimientos', movimientosRoutes);
 
 app.use(rutaNoEncontrada);
 app.use(manejadorErrores);
