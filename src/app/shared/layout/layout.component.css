@@ -1,0 +1,126 @@
+.shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.barra-lateral {
+  background: var(--color-primary-dark);
+  color: #f3f6f4;
+  padding: 1.5rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.marca-icono {
+  font-size: 1.6rem;
+}
+
+.marca strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+.marca small {
+  color: #a9c2b9;
+  font-size: 0.75rem;
+}
+
+.navegacion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.navegacion a {
+  color: #d6e3dd;
+  text-decoration: none;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.92rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+}
+
+.navegacion a:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.navegacion a.activo {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-left-color: var(--color-accent);
+}
+
+.sesion {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.usuario-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.usuario-correo {
+  font-size: 0.85rem;
+  color: #f3f6f4;
+}
+
+.usuario-rol {
+  font-size: 0.72rem;
+  text-transform: capitalize;
+  color: var(--color-accent);
+}
+
+.sesion .btn-secondary {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #f3f6f4;
+}
+
+.sesion .btn-secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.contenido {
+  padding: 2.5rem 3rem;
+  max-width: 1100px;
+}
+
+@media (max-width: 760px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .barra-lateral {
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+  }
+  .navegacion {
+    flex-direction: row;
+  }
+  .sesion {
+    border-top: none;
+    flex-direction: row;
+  }
+  .usuario-info {
+    display: none;
+  }
+  .contenido {
+    padding: 1.5rem;
+  }
+}

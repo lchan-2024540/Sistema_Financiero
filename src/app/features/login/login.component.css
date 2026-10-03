@@ -1,0 +1,59 @@
+.pagina-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, var(--color-primary-dark) 0%, var(--color-primary) 55%, var(--color-bg) 55%);
+  padding: 1.5rem;
+}
+
+.tarjeta-login {
+  width: 100%;
+  max-width: 380px;
+  padding: 2.25rem 2rem;
+}
+
+.encabezado-login {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.encabezado-login .icono {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.encabezado-login h1 {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.encabezado-login p {
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.btn-ancho {
+  width: 100%;
+  justify-content: center;
+  padding: 0.7em 1.1em;
+  margin-top: 0.25rem;
+}
+
+.nota-credenciales {
+  margin: 1.5rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.78rem;
+  text-align: center;
+  color: var(--color-ink-soft);
+}
+
+.nota-credenciales code {
+  background: var(--color-accent-soft);
+  color: var(--color-primary-dark);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.78rem;
+}

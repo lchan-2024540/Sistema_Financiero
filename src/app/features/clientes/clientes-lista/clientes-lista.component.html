@@ -1,0 +1,52 @@
+<div class="encabezado-pagina">
+  <div>
+    <h1>Clientes</h1>
+    <p>Administra los clientes registrados en el sistema.</p>
+  </div>
+  <a routerLink="/clientes/nuevo" class="btn btn-primary">+ Nuevo cliente</a>
+</div>
+
+@if (errorMensaje()) {
+  <div class="mensaje-error">{{ errorMensaje() }}</div>
+}
+
+<div class="panel">
+  @if (cargando()) {
+    <p class="estado-vacio">Cargando clientes…</p>
+  } @else if (clientes().length === 0) {
+    <p class="estado-vacio">Todavía no hay clientes registrados.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>DPI ficticio</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cliente of clientes(); track cliente.id_cliente) {
+          <tr>
+            <td>{{ cliente.nombre }} {{ cliente.apellido }}</td>
+            <td>{{ cliente.dpi_ficticio }}</td>
+            <td>{{ cliente.correo }}</td>
+            <td>{{ cliente.telefono || '—' }}</td>
+            <td>
+              <span class="etiqueta" [class.etiqueta-activa]="cliente.activo" [class.etiqueta-inactiva]="!cliente.activo">
+                {{ cliente.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              @if (cliente.activo) {
+                <button class="btn btn-danger btn-pequeno" (click)="desactivar(cliente)">Desactivar</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

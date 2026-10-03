@@ -1,0 +1,52 @@
+<div class="encabezado-pagina">
+  <div>
+    <h1>Cuentas</h1>
+    <p>Cuentas bancarias y su saldo actual.</p>
+  </div>
+  <a routerLink="/cuentas/nueva" class="btn btn-primary">+ Nueva cuenta</a>
+</div>
+
+@if (errorMensaje()) {
+  <div class="mensaje-error">{{ errorMensaje() }}</div>
+}
+
+<div class="panel">
+  @if (cargando()) {
+    <p class="estado-vacio">Cargando cuentas…</p>
+  } @else if (cuentas().length === 0) {
+    <p class="estado-vacio">Todavía no hay cuentas registradas.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>No. de cuenta</th>
+          <th>Cliente</th>
+          <th>Tipo</th>
+          <th>Saldo</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cuenta of cuentas(); track cuenta.id_cuenta) {
+          <tr>
+            <td>{{ cuenta.numero_cuenta }}</td>
+            <td>{{ cuenta.cliente_nombre }} {{ cuenta.cliente_apellido }}</td>
+            <td>{{ cuenta.tipo_cuenta }}</td>
+            <td>{{ formatearMoneda(cuenta.saldo) }}</td>
+            <td>
+              <span class="etiqueta" [class.etiqueta-activa]="cuenta.estado === 'activa'" [class.etiqueta-inactiva]="cuenta.estado === 'inactiva'">
+                {{ cuenta.estado === 'activa' ? 'Activa' : 'Inactiva' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-secondary btn-pequeno" (click)="alternarEstado(cuenta)">
+                {{ cuenta.estado === 'activa' ? 'Desactivar' : 'Reactivar' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
