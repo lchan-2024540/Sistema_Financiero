@@ -1,0 +1,61 @@
+<div class="encabezado-pagina">
+  <div>
+    <h1>Nueva cuenta</h1>
+    <p>Abre una cuenta para un cliente activo.</p>
+  </div>
+  <a routerLink="/cuentas" class="btn btn-secondary">Cancelar</a>
+</div>
+
+@if (errorMensaje()) {
+  <div class="mensaje-error">{{ errorMensaje() }}</div>
+}
+
+<div class="panel panel-formulario">
+  @if (cargandoListas()) {
+    <p class="estado-vacio">Cargando datos…</p>
+  } @else {
+    <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+      <div class="campo">
+        <label for="cliente">Cliente</label>
+        <select id="cliente" formControlName="id_cliente">
+          <option [ngValue]="null" disabled>Selecciona un cliente</option>
+          @for (cliente of clientes(); track cliente.id_cliente) {
+            <option [ngValue]="cliente.id_cliente">
+              {{ cliente.nombre }} {{ cliente.apellido }} — {{ cliente.dpi_ficticio }}
+            </option>
+          }
+        </select>
+        @if (clientes().length === 0) {
+          <span class="error-texto">No hay clientes activos. Registra uno primero.</span>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="tipo">Tipo de cuenta</label>
+        <select id="tipo" formControlName="id_tipo_cuenta">
+          <option [ngValue]="null" disabled>Selecciona un tipo</option>
+          @for (tipo of tiposCuenta(); track tipo.id_tipo_cuenta) {
+            <option [ngValue]="tipo.id_tipo_cuenta">
+              {{ tipo.nombre }} ({{ tipo.tasa_interes }}% interés)
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="fila-campos">
+        <div class="campo">
+          <label for="numero">Número de cuenta</label>
+          <input id="numero" type="text" formControlName="numero_cuenta" placeholder="4000-0011" />
+        </div>
+        <div class="campo">
+          <label for="saldo">Saldo inicial</label>
+          <input id="saldo" type="number" formControlName="saldo_inicial" min="0" step="0.01" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="guardando() || clientes().length === 0">
+        {{ guardando() ? 'Guardando…' : 'Crear cuenta' }}
+      </button>
+    </form>
+  }
+</div>
