@@ -78,3 +78,15 @@ export interface RespuestaLogin {
   token: string;
   usuario: UsuarioAutenticado;
 }
+
+export interface OperacionInput {
+  id_cuenta: number;
+  monto: number;
+}
+
+export interface RespuestaOperacion {
+  mensaje: string;
+  id_cuenta: number;
+  monto: number;
+  saldo_actual: number;
+}
