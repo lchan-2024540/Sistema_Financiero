@@ -1,0 +1,31 @@
+@if (confirmService.activa(); as c) {
+  <div class="fondo" (click)="confirmService.responder(false)">
+    <div
+      class="dialogo panel"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="confirm-titulo"
+      aria-describedby="confirm-mensaje"
+      (click)="$event.stopPropagation()"
+      (keydown.tab)="atraparTab($event)"
+    >
+      <h2 id="confirm-titulo">{{ c.titulo }}</h2>
+      <p id="confirm-mensaje">{{ c.mensaje }}</p>
+      <div class="acciones">
+        <button #btnCancelar type="button" class="btn btn-secondary" (click)="confirmService.responder(false)">
+          {{ c.textoCancelar || 'Cancelar' }}
+        </button>
+        <button
+          #btnConfirmar
+          type="button"
+          class="btn"
+          [class.btn-primary]="!c.peligro"
+          [class.btn-peligro]="c.peligro"
+          (click)="confirmService.responder(true)"
+        >
+          {{ c.textoConfirmar || 'Confirmar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,100 @@
+<div class="encabezado-pagina">
+  <div>
+    <h1>Transferencias</h1>
+    <p>
+      {{
+        esCliente
+          ? 'Envía dinero desde tus cuentas a otra cuenta del banco.'
+          : 'Transfiere fondos entre cuentas del banco.'
+      }}
+    </p>
+  </div>
+</div>
+
+@if (errorMensaje()) {
+  <div class="mensaje-error" role="alert">{{ errorMensaje() }}</div>
+}
+
+@if (resultado(); as r) {
+  <div class="mensaje-exito" role="status">
+    <strong>{{ r.mensaje }}</strong>
+    <span>
+      {{ formatearMoneda(r.monto) }} de {{ r.numero_cuenta_origen }} a
+      {{ r.numero_cuenta_destino }} ({{ r.titular_destino }}).
+      Nuevo saldo de la cuenta origen: {{ formatearMoneda(r.saldo_origen_actual) }}.
+    </span>
+  </div>
+}
+
+<div class="panel panel-formulario">
+  @if (cargando()) {
+    <p class="estado-vacio">Cargando cuentas…</p>
+  } @else if (cuentasActivas().length === 0) {
+    <p class="estado-vacio">
+      {{ esCliente ? 'No tienes cuentas activas para transferir.' : 'No hay cuentas activas.' }}
+    </p>
+  } @else {
+    <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+      <div class="campo">
+        <label for="origen">Cuenta de origen</label>
+        <select id="origen" formControlName="origen">
+          <option [ngValue]="null" disabled>Selecciona la cuenta de origen</option>
+          @for (c of cuentasActivas(); track c.id_cuenta) {
+            <option [ngValue]="c.id_cuenta">{{ etiquetaCuenta(c) }}</option>
+          }
+        </select>
+        @if (formulario.get('origen')?.invalid && formulario.get('origen')?.touched) {
+          <span class="error-texto">Selecciona la cuenta de origen.</span>
+        }
+      </div>
+
+      @if (esCliente) {
+        <div class="campo">
+          <label for="numeroDestino">Número de cuenta destino</label>
+          <input
+            id="numeroDestino"
+            type="text"
+            formControlName="numeroDestino"
+            placeholder="4000-0011"
+            autocomplete="off"
+          />
+          @if (formulario.get('numeroDestino')?.invalid && formulario.get('numeroDestino')?.touched) {
+            <span class="error-texto">Ingresa el número de la cuenta destino.</span>
+          }
+        </div>
+      } @else {
+        <div class="campo">
+          <label for="destino">Cuenta de destino</label>
+          <select id="destino" formControlName="destino">
+            <option [ngValue]="null" disabled>Selecciona la cuenta de destino</option>
+            @for (c of cuentasDestino(); track c.id_cuenta) {
+              <option [ngValue]="c.id_cuenta">{{ etiquetaCuenta(c) }}</option>
+            }
+          </select>
+          @if (formulario.get('destino')?.invalid && formulario.get('destino')?.touched) {
+            <span class="error-texto">Selecciona la cuenta de destino.</span>
+          }
+        </div>
+      }
+
+      <div class="campo">
+        <label for="monto">Monto (GTQ)</label>
+        <input
+          id="monto"
+          type="number"
+          formControlName="monto"
+          min="0.01"
+          step="0.01"
+          placeholder="0.00"
+        />
+        @if (formulario.get('monto')?.invalid && formulario.get('monto')?.touched) {
+          <span class="error-texto">Ingresa un monto mayor que cero.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="enviando()">
+        {{ enviando() ? 'Transfiriendo…' : 'Transferir' }}
+      </button>
+    </form>
+  }
+</div>
