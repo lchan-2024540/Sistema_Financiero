@@ -105,7 +105,7 @@ insert into Cliente (nombre, apellido, dpi_ficticio, telefono, correo) values
 --   admin@bancoacademico.com     -> Admin123*
 --   cajero@bancoacademico.com    -> Cajero123*
 --   usuario03@bancoacademico.com -> Usuario03*
---   cliente@bancoacademico.com   -> Cliente123*   (rol cliente, vinculado a Carlos Ramirez, id_cliente 4)
+--   cada cliente (correo de la tabla Cliente) -> Cliente123*   (rol cliente)
 insert into Usuario (id_cliente, correo, password_hash, rol) values
     (null, 'admin@bancoacademico.com',      '$2b$10$qlVgAbgycSOuO4vA2OFvy.dRsbLa/.u/FMsIiJX.E3Jkx9IUGPyqa', 'administrador'),
     (null, 'cajero@bancoacademico.com',     '$2b$10$QwLZcbZ2h65FynI4UflSaeYE7Vm.qlLKKZIs2XGJP5YzBc4y/Dj02', 'cajero'),
@@ -116,8 +116,14 @@ insert into Usuario (id_cliente, correo, password_hash, rol) values
     (null, 'usuario07@bancoacademico.com',  '$2b$10$EkcK.Y/VwbDrZ1SNiDUWj.TNu8KwgTrQSxVkMJSq56D2gZW2q836C', 'cajero'),
     (null, 'usuario08@bancoacademico.com',  '$2b$10$vlXDZGEYrMdeWdeuTa9Zf.gw/RB7rYloNIpEObs9DPyyAmG41s6j6', 'cajero'),
     (null, 'usuario09@bancoacademico.com',  '$2b$10$qGDf7JS7X/9g6ZIiHA9Jlu7u0vIPCDNLRHOgEZajIKYy.BNjPhm8K', 'cajero'),
-    (null, 'usuario10@bancoacademico.com',  '$2b$10$ZBVVi5h4HkR1akPt5m5x9eTAm9GnQb4UBksFqub5ewdOUWdDG2VeC', 'cajero'),
-    (4,    'cliente@bancoacademico.com',    '$2b$10$Glyv6jrQfAJD.cdXg.dyyOjwobawVnrASM5Mq9JrivnpzU1rvy5qq', 'cliente');
+    (null, 'usuario10@bancoacademico.com',  '$2b$10$ZBVVi5h4HkR1akPt5m5x9eTAm9GnQb4UBksFqub5ewdOUWdDG2VeC', 'cajero');
+
+-- Un usuario con rol "cliente" por cada cliente: inicia sesión con el correo
+-- del cliente y la contraseña Cliente123* (hash bcrypt, ficticia).
+insert into Usuario (id_cliente, correo, password_hash, rol)
+    select id_cliente, correo, '$2b$10$Glyv6jrQfAJD.cdXg.dyyOjwobawVnrASM5Mq9JrivnpzU1rvy5qq', 'cliente'
+    from Cliente
+    order by id_cliente;
 
 insert into Cuenta (id_cliente, id_tipo_cuenta, numero_cuenta, saldo, estado) values
     (1,  1,  '4000-0001', 1500.00, 'activa'),
