@@ -1,5 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { ConfirmService } from '../../../core/services/confirm.service';
 import { CuentasService } from '../../../core/services/cuentas.service';
 import { Cuenta } from '../../../core/models/modelos';
 
@@ -15,7 +17,11 @@ export class CuentasListaComponent implements OnInit {
   cargando = signal(true);
   errorMensaje = signal<string | null>(null);
 
-  constructor(private cuentasService: CuentasService) {}
+  constructor(
+    private cuentasService: CuentasService,
+    private confirmService: ConfirmService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.cargarCuentas();
@@ -35,11 +41,14 @@ export class CuentasListaComponent implements OnInit {
     });
   }
 
-  alternarEstado(cuenta: Cuenta): void {
+  async alternarEstado(cuenta: Cuenta): Promise<void> {
     const nuevoEstado = cuenta.estado === 'activa' ? 'inactiva' : 'activa';
-    const confirmado = confirm(
-      `¿Cambiar la cuenta ${cuenta.numero_cuenta} a "${nuevoEstado}"?`
-    );
+    const confirmado = await this.confirmService.confirmar({
+      titulo: nuevoEstado === 'activa' ? 'Reactivar cuenta' : 'Desactivar cuenta',
+      mensaje: `¿Cambiar la cuenta ${cuenta.numero_cuenta} a "${nuevoEstado}"?`,
+      textoConfirmar: nuevoEstado === 'activa' ? 'Reactivar' : 'Desactivar',
+      peligro: nuevoEstado === 'inactiva',
+    });
     if (!confirmado) return;
 
     this.cuentasService.cambiarEstado(cuenta.id_cuenta, nuevoEstado).subscribe({

@@ -9,8 +9,13 @@
     </div>
 
     <nav class="navegacion">
-      <a routerLink="/clientes" routerLinkActive="activo">Clientes</a>
-      <a routerLink="/cuentas" routerLinkActive="activo">Cuentas</a>
+      @if (authService.esPersonal()) {
+        <a routerLink="/clientes" routerLinkActive="activo">Clientes</a>
+      }
+      <a routerLink="/cuentas" routerLinkActive="activo">
+        {{ authService.esPersonal() ? 'Cuentas' : 'Mis cuentas' }}
+      </a>
+      <a routerLink="/transferencias" routerLinkActive="activo">Transferencias</a>
     </nav>
 
     <div class="sesion">

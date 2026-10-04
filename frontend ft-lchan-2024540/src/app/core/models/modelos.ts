@@ -37,10 +37,41 @@ export interface CuentaInput {
   saldo_inicial?: number;
 }
 
+export type Rol = 'administrador' | 'cajero' | 'cliente';
+
 export interface UsuarioAutenticado {
   id_usuario: number;
   correo: string;
-  rol: 'administrador' | 'cajero';
+  rol: Rol;
+  id_cliente?: number | null;
+}
+
+export interface RegistroInput {
+  nombre: string;
+  apellido: string;
+  dpi_ficticio: string;
+  telefono?: string;
+  correo: string;
+  password: string;
+}
+
+export interface TransferenciaInput {
+  id_cuenta_origen: number;
+  id_cuenta_destino?: number;
+  numero_cuenta_destino?: string;
+  monto: number;
+}
+
+export interface RespuestaTransferencia {
+  mensaje: string;
+  id_cuenta_origen: number;
+  id_cuenta_destino: number;
+  numero_cuenta_origen: string;
+  numero_cuenta_destino: string;
+  titular_destino: string;
+  monto: number;
+  saldo_origen_actual: number;
+  saldo_destino_actual: number;
 }
 
 export interface RespuestaLogin {

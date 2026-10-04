@@ -266,6 +266,16 @@ tbody tr:hover {
   gap: 1rem;
 }
 
+/* Sin esto, los inputs (ancho intrínseco) desbordan la columna del grid. */
+.fila-campos > .campo {
+  min-width: 0;
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+}
+
 @media (max-width: 560px) {
   .fila-campos {
     grid-template-columns: 1fr;

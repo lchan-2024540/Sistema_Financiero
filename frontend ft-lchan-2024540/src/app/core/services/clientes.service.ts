@@ -24,6 +24,10 @@ export class ClientesService {
     return this.http.patch<Cliente>(`${API_BASE_URL}/clientes/${id}`, datos);
   }
 
+  reactivar(id: number): Observable<Cliente> {
+    return this.http.patch<Cliente>(`${API_BASE_URL}/clientes/${id}/reactivar`, {});
+  }
+
   desactivar(id: number): Observable<{ mensaje: string }> {
     return this.http.delete<{ mensaje: string }>(`${API_BASE_URL}/clientes/${id}`);
   }

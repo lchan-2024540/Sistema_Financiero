@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { API_BASE_URL } from '../config';
-import { RespuestaLogin, UsuarioAutenticado } from '../models/modelos';
+import { RegistroInput, RespuestaLogin, Rol, UsuarioAutenticado } from '../models/modelos';
 
 const CLAVE_STORAGE = 'banco_academico_sesion';
 
@@ -17,15 +17,33 @@ export class AuthService {
   login(correo: string, password: string): Observable<RespuestaLogin> {
     return this.http
       .post<RespuestaLogin>(`${API_BASE_URL}/auth/login`, { correo, password })
-      .pipe(
-        tap((respuesta) => {
-          localStorage.setItem(
-            CLAVE_STORAGE,
-            JSON.stringify({ token: respuesta.token, usuario: respuesta.usuario })
-          );
-          this.usuarioActual.set(respuesta.usuario);
-        })
-      );
+      .pipe(tap((respuesta) => this.guardarSesion(respuesta)));
+  }
+
+  /** Autoregistro de un cliente nuevo; deja la sesión iniciada. */
+  registrar(datos: RegistroInput): Observable<RespuestaLogin> {
+    return this.http
+      .post<RespuestaLogin>(`${API_BASE_URL}/auth/registro`, datos)
+      .pipe(tap((respuesta) => this.guardarSesion(respuesta)));
+  }
+
+  /** true si el usuario actual tiene alguno de los roles indicados. */
+  tieneRol(...roles: Rol[]): boolean {
+    const usuario = this.usuarioActual();
+    return !!usuario && roles.includes(usuario.rol);
+  }
+
+  /** true para administrador y cajero (personal del banco). */
+  esPersonal(): boolean {
+    return this.tieneRol('administrador', 'cajero');
+  }
+
+  private guardarSesion(respuesta: RespuestaLogin): void {
+    localStorage.setItem(
+      CLAVE_STORAGE,
+      JSON.stringify({ token: respuesta.token, usuario: respuesta.usuario })
+    );
+    this.usuarioActual.set(respuesta.usuario);
   }
 
   logout(): void {

@@ -3,7 +3,7 @@
     <div class="encabezado-login">
       <span class="icono">🏦</span>
       <h1>Banco Académico</h1>
-      <p>Inicia sesión para administrar clientes y cuentas.</p>
+      <p>Inicia sesión para continuar.</p>
     </div>
 
     @if (errorMensaje()) {
@@ -17,7 +17,7 @@
           id="correo"
           type="email"
           formControlName="correo"
-          placeholder="admin@bancoacademico.com"
+          placeholder="tucorreo@ejemplo.com"
           autocomplete="username"
         />
         @if (formulario.get('correo')?.invalid && formulario.get('correo')?.touched) {
@@ -44,9 +44,9 @@
       </button>
     </form>
 
-    <p class="nota-credenciales">
-      Credenciales de prueba: <code>admin&#64;bancoacademico.com</code> /
-      <code>Admin123*</code>
-    </p>
+    <div class="bloque-registro">
+      <span>¿Aún no tienes cuenta?</span>
+      <a routerLink="/registro" class="btn btn-secondary btn-ancho">Registrarse</a>
+    </div>
   </div>
 </div>

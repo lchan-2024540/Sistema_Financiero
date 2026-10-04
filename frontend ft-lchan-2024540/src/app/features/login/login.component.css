@@ -41,19 +41,20 @@
   margin-top: 0.25rem;
 }
 
-.nota-credenciales {
-  margin: 1.5rem 0 0;
+.bloque-registro {
+  margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid var(--color-border);
-  font-size: 0.78rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6rem;
+  font-size: 0.88rem;
   text-align: center;
   color: var(--color-ink-soft);
 }
 
-.nota-credenciales code {
-  background: var(--color-accent-soft);
-  color: var(--color-primary-dark);
-  padding: 0.1em 0.4em;
-  border-radius: 4px;
-  font-size: 0.78rem;
+.bloque-registro .btn-ancho {
+  margin-top: 0;
+  text-decoration: none;
 }
