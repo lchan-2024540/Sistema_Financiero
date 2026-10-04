@@ -15,6 +15,10 @@
       <a routerLink="/cuentas" routerLinkActive="activo">
         {{ authService.esPersonal() ? 'Cuentas' : 'Mis cuentas' }}
       </a>
+      @if (authService.esPersonal()) {
+        <a routerLink="/depositos" routerLinkActive="activo">Depósitos</a>
+        <a routerLink="/retiros" routerLinkActive="activo">Retiros</a>
+      }
       <a routerLink="/transferencias" routerLinkActive="activo">Transferencias</a>
     </nav>
 
