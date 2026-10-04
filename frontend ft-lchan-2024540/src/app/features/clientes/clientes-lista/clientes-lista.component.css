@@ -1,0 +1,3 @@
+/* Esta pantalla reutiliza las clases globales definidas en src/styles.css
+   (.encabezado-pagina, .panel, .etiqueta, etc.) para mantener consistencia
+   visual entre todas las listas del sistema (clientes, cuentas). */

@@ -1,0 +1,51 @@
+.fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(11, 51, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: aparecer 0.12s ease-out;
+}
+
+.dialogo {
+  width: 100%;
+  max-width: 420px;
+  padding: 1.6rem 1.6rem 1.3rem;
+  box-shadow: 0 12px 40px rgba(11, 51, 42, 0.3);
+}
+
+.dialogo h2 {
+  margin-bottom: 0.5rem;
+}
+
+.dialogo p {
+  margin-bottom: 1.4rem;
+  white-space: pre-line;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.btn-peligro {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.btn-peligro:hover {
+  background: #8a2820;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
