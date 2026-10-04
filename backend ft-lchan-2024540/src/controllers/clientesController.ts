@@ -100,6 +100,23 @@ export async function actualizarCliente(req: Request, res: Response): Promise<vo
   res.json(filas[0]);
 }
 
+// PATCH /clientes/:id/reactivar -> revierte la desactivación lógica
+export async function reactivarCliente(req: Request, res: Response): Promise<void> {
+  const { id } = req.params;
+
+  const [existente]: any = await pool.query('SELECT * FROM Cliente WHERE id_cliente = ?', [id]);
+  if (existente.length === 0) {
+    throw new ErrorNegocio('Cliente no encontrado.', 404);
+  }
+  if (existente[0].activo) {
+    throw new ErrorNegocio('El cliente ya está activo.');
+  }
+
+  await pool.query('UPDATE Cliente SET activo = TRUE WHERE id_cliente = ?', [id]);
+  const [filas]: any = await pool.query('SELECT * FROM Cliente WHERE id_cliente = ?', [id]);
+  res.json(filas[0]);
+}
+
 // DELETE /clientes/:id -> desactivación lógica (no se borra físicamente)
 export async function desactivarCliente(req: Request, res: Response): Promise<void> {
   const { id } = req.params;

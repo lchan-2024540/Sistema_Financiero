@@ -18,10 +18,15 @@ export async function listarMovimientos(_req: Request, res: Response): Promise<v
 export async function obtenerMovimientosPorCuenta(req: Request, res: Response): Promise<void> {
   const { id_cuenta } = req.params;
 
-  const [cuenta]: any = await pool.query('SELECT id_cuenta FROM Cuenta WHERE id_cuenta = ?', [
-    id_cuenta,
-  ]);
-  if (cuenta.length === 0) {
+  const [cuenta]: any = await pool.query(
+    'SELECT id_cuenta, id_cliente FROM Cuenta WHERE id_cuenta = ?',
+    [id_cuenta]
+  );
+  // Para un cliente, una cuenta ajena se trata como inexistente.
+  if (
+    cuenta.length === 0 ||
+    (req.usuario?.rol === 'cliente' && cuenta[0].id_cliente !== req.usuario.id_cliente)
+  ) {
     throw new ErrorNegocio('Cuenta no encontrada.', 404);
   }
 

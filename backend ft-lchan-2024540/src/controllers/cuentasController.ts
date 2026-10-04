@@ -4,7 +4,14 @@ import { ErrorNegocio } from '../utils/ErrorNegocio';
 import { CuentaInput } from '../models/types';
 
 // GET /cuentas -> lista todas las cuentas
-export async function listarCuentas(_req: Request, res: Response): Promise<void> {
+export async function listarCuentas(req: Request, res: Response): Promise<void> {
+  // Un cliente solo ve sus propias cuentas; el personal ve todas.
+  const soloDelCliente = req.usuario?.rol === 'cliente';
+  if (soloDelCliente && !req.usuario?.id_cliente) {
+    res.json([]);
+    return;
+  }
+
   const [filas] = await pool.query(
     `SELECT c.id_cuenta, c.numero_cuenta, c.saldo, c.estado, c.fecha_apertura,
             cl.id_cliente, cl.nombre AS cliente_nombre, cl.apellido AS cliente_apellido,
@@ -12,7 +19,9 @@ export async function listarCuentas(_req: Request, res: Response): Promise<void>
      FROM Cuenta c
      JOIN Cliente cl ON cl.id_cliente = c.id_cliente
      JOIN TipoCuenta tc ON tc.id_tipo_cuenta = c.id_tipo_cuenta
-     ORDER BY c.id_cuenta`
+     ${soloDelCliente ? 'WHERE c.id_cliente = ?' : ''}
+     ORDER BY c.id_cuenta`,
+    soloDelCliente ? [req.usuario!.id_cliente] : []
   );
   res.json(filas);
 }
@@ -28,10 +37,22 @@ export async function obtenerCuenta(req: Request, res: Response): Promise<void> 
     [id]
   );
 
-  if (filas.length === 0) {
+  // Para un cliente, una cuenta ajena se trata como inexistente.
+  if (
+    filas.length === 0 ||
+    (req.usuario?.rol === 'cliente' && filas[0].id_cliente !== req.usuario.id_cliente)
+  ) {
     throw new ErrorNegocio('Cuenta no encontrada.', 404);
   }
   res.json(filas[0]);
+}
+
+// GET /tipos-cuenta -> catálogo de tipos de cuenta
+export async function listarTiposCuenta(_req: Request, res: Response): Promise<void> {
+  const [filas] = await pool.query(
+    'SELECT id_tipo_cuenta, nombre, tasa_interes FROM TipoCuenta ORDER BY id_tipo_cuenta'
+  );
+  res.json(filas);
 }
 
 // POST /cuentas -> crea una cuenta asociada a un cliente existente

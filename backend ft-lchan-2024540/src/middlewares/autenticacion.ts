@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { verificarToken, PayloadToken } from '../utils/jwt';
+import { verificarToken, PayloadToken, Rol } from '../utils/jwt';
 import { ErrorNegocio } from '../utils/ErrorNegocio';
 
 // Extiende el tipo Request de Express para poder guardar el usuario autenticado
@@ -36,9 +36,11 @@ export function requiereAutenticacion(req: Request, _res: Response, next: NextFu
 
 /**
  * Middleware de control de acceso por rol.
- * Ejemplo de uso: requiereRol('administrador') solo deja pasar administradores.
+ * Ejemplo de uso: requiereRol('administrador', 'cajero') deja pasar solo al personal
+ * del banco (los usuarios con rol "cliente" reciben 403).
+ * Debe usarse DESPUÉS de requiereAutenticacion.
  */
-export function requiereRol(...rolesPermitidos: Array<'administrador' | 'cajero'>) {
+export function requiereRol(...rolesPermitidos: Rol[]) {
   return (req: Request, _res: Response, next: NextFunction): void => {
     if (!req.usuario || !rolesPermitidos.includes(req.usuario.rol)) {
       throw new ErrorNegocio('No tienes permisos para realizar esta acción.', 403);

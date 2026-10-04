@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes';
 import clientesRoutes from './routes/clientesRoutes';
-import cuentasRoutes from './routes/cuentasRoutes';
+import cuentasRoutes, { tiposCuentaRouter } from './routes/cuentasRoutes';
 import { depositosRouter, retirosRouter } from './routes/operacionesRoutes';
 import transferenciasRoutes from './routes/transferenciasRoutes';
 import movimientosRoutes from './routes/movimientosRoutes';
@@ -23,6 +23,7 @@ app.get('/', (_req, res) => {
 app.use('/auth', authRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/cuentas', cuentasRoutes);
+app.use('/tipos-cuenta', tiposCuentaRouter);
 app.use('/depositos', depositosRouter);
 app.use('/retiros', retirosRouter);
 app.use('/transferencias', transferenciasRoutes);

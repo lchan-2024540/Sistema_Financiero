@@ -1,12 +1,23 @@
 import { Router } from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
-import { requiereAutenticacion } from '../middlewares/autenticacion';
+import { requiereAutenticacion, requiereRol } from '../middlewares/autenticacion';
 import { registrarDeposito, registrarRetiro } from '../controllers/operacionesController';
 
+// Depósitos y retiros se hacen en ventanilla: solo personal del banco.
 const depositosRouter = Router();
-depositosRouter.post('/', requiereAutenticacion, asyncHandler(registrarDeposito));
+depositosRouter.post(
+  '/',
+  requiereAutenticacion,
+  requiereRol('administrador', 'cajero'),
+  asyncHandler(registrarDeposito)
+);
 
 const retirosRouter = Router();
-retirosRouter.post('/', requiereAutenticacion, asyncHandler(registrarRetiro));
+retirosRouter.post(
+  '/',
+  requiereAutenticacion,
+  requiereRol('administrador', 'cajero'),
+  asyncHandler(registrarRetiro)
+);
 
 export { depositosRouter, retirosRouter };

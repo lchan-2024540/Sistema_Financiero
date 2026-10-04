@@ -1,25 +1,27 @@
 import { Router } from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
-import { requiereAutenticacion } from '../middlewares/autenticacion';
+import { requiereAutenticacion, requiereRol } from '../middlewares/autenticacion';
 import {
   listarClientes,
   obtenerCliente,
   crearCliente,
   actualizarCliente,
   desactivarCliente,
+  reactivarCliente,
 } from '../controllers/clientesController';
 
 const router = Router();
 
-// Consultas: públicas (requieren estar autenticado en la práctica, ya que
-// el frontend siempre habrá hecho login antes, pero no se exige aquí).
+// La gestión de clientes es solo para el personal del banco (administrador y
+// cajero). Los usuarios con rol "cliente" no pueden listar ni modificar clientes.
+router.use(requiereAutenticacion, requiereRol('administrador', 'cajero'));
+
 router.get('/', asyncHandler(listarClientes));
 router.get('/:id', asyncHandler(obtenerCliente));
-
-// Escritura: requiere sesión iniciada (control de acceso).
-router.post('/', requiereAutenticacion, asyncHandler(crearCliente));
-router.put('/:id', requiereAutenticacion, asyncHandler(actualizarCliente));
-router.patch('/:id', requiereAutenticacion, asyncHandler(actualizarCliente));
-router.delete('/:id', requiereAutenticacion, asyncHandler(desactivarCliente));
+router.post('/', asyncHandler(crearCliente));
+router.put('/:id', asyncHandler(actualizarCliente));
+router.patch('/:id', asyncHandler(actualizarCliente));
+router.delete('/:id', asyncHandler(desactivarCliente));
+router.patch('/:id/reactivar', asyncHandler(reactivarCliente));
 
 export default router;
