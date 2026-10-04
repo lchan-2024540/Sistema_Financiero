@@ -52,6 +52,20 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'depositos',
+        canActivate: [rolGuard('administrador', 'cajero')],
+        data: { tipo: 'deposito' },
+        loadComponent: () =>
+          import('./features/operaciones/operacion.component').then((m) => m.OperacionComponent),
+      },
+      {
+        path: 'retiros',
+        canActivate: [rolGuard('administrador', 'cajero')],
+        data: { tipo: 'retiro' },
+        loadComponent: () =>
+          import('./features/operaciones/operacion.component').then((m) => m.OperacionComponent),
+      },
+      {
         path: 'transferencias',
         loadComponent: () =>
           import('./features/transferencias/transferencias.component').then(
