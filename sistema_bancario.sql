@@ -18,7 +18,7 @@ create table Usuario (
     id_cliente      int null,
     correo          varchar(120) not null unique,
     password_hash   varchar(255) not null,
-    rol             enum('administrador','cajero') not null default 'cajero',
+    rol             enum('administrador','cajero','cliente') not null default 'cajero',
     activo          boolean not null default true,
     constraint fk_usuario_cliente
         foreign key (id_cliente) references Cliente(id_cliente)
@@ -105,6 +105,7 @@ insert into Cliente (nombre, apellido, dpi_ficticio, telefono, correo) values
 --   admin@bancoacademico.com     -> Admin123*
 --   cajero@bancoacademico.com    -> Cajero123*
 --   usuario03@bancoacademico.com -> Usuario03*
+--   cliente@bancoacademico.com   -> Cliente123*   (rol cliente, vinculado a Carlos Ramirez, id_cliente 4)
 insert into Usuario (id_cliente, correo, password_hash, rol) values
     (null, 'admin@bancoacademico.com',      '$2b$10$qlVgAbgycSOuO4vA2OFvy.dRsbLa/.u/FMsIiJX.E3Jkx9IUGPyqa', 'administrador'),
     (null, 'cajero@bancoacademico.com',     '$2b$10$QwLZcbZ2h65FynI4UflSaeYE7Vm.qlLKKZIs2XGJP5YzBc4y/Dj02', 'cajero'),
@@ -115,7 +116,8 @@ insert into Usuario (id_cliente, correo, password_hash, rol) values
     (null, 'usuario07@bancoacademico.com',  '$2b$10$EkcK.Y/VwbDrZ1SNiDUWj.TNu8KwgTrQSxVkMJSq56D2gZW2q836C', 'cajero'),
     (null, 'usuario08@bancoacademico.com',  '$2b$10$vlXDZGEYrMdeWdeuTa9Zf.gw/RB7rYloNIpEObs9DPyyAmG41s6j6', 'cajero'),
     (null, 'usuario09@bancoacademico.com',  '$2b$10$qGDf7JS7X/9g6ZIiHA9Jlu7u0vIPCDNLRHOgEZajIKYy.BNjPhm8K', 'cajero'),
-    (null, 'usuario10@bancoacademico.com',  '$2b$10$ZBVVi5h4HkR1akPt5m5x9eTAm9GnQb4UBksFqub5ewdOUWdDG2VeC', 'cajero');
+    (null, 'usuario10@bancoacademico.com',  '$2b$10$ZBVVi5h4HkR1akPt5m5x9eTAm9GnQb4UBksFqub5ewdOUWdDG2VeC', 'cajero'),
+    (4,    'cliente@bancoacademico.com',    '$2b$10$Glyv6jrQfAJD.cdXg.dyyOjwobawVnrASM5Mq9JrivnpzU1rvy5qq', 'cliente');
 
 insert into Cuenta (id_cliente, id_tipo_cuenta, numero_cuenta, saldo, estado) values
     (1,  1,  '4000-0001', 1500.00, 'activa'),
